@@ -1,0 +1,22 @@
+{
+  "name": "stanzajs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dist": "mkdir -p dist && cp -R node_modules src views dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "date-format": "^4.0.14",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "google-auth-library": "^9.7.0",
+    "googleapis": "^134.0.0",
+    "ws": "^8.16.0"
+  }
+}

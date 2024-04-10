@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dist": "mkdir -p dist && cp -R node_modules views app.js dist"
+    "dist": "mkdir -p dist && cp -R node_modules views app.js README.md dist"
   },
   "keywords": [],
   "author": "",

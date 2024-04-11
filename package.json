@@ -5,18 +5,24 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dist": "mkdir -p dist && cp -R node_modules views app.js README.md dist"
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bufferutil": "^4.0.8",
     "date-format": "^4.0.14",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "google-auth-library": "^9.7.0",
     "googleapis": "^134.0.0",
+    "utf-8-validate": "^6.0.3",
     "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }

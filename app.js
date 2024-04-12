@@ -44,7 +44,7 @@ app.use(
   })
 );
 
-app.set('views', 'src/views');
+app.set('views', './views');
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs').__express);
 
@@ -57,9 +57,10 @@ app.get("/", (req, res) => {
     const loginLink = googleLoginLink(clientId, clientSecret);
     res.render("index", { loginLink: loginLink });
   } else {
-    console.log(`Reading client_secret.json...`);
+    const jsonFilename = "client_secret.json";
+    console.log(`Reading ${jsonFilename}...`);
     fs.readFile(
-      "client_secret.json",
+      jsonFilename,
       function processClientSecrets(err, content) {
         if (err) {
           console.log("Error loading client secret file: " + err);
@@ -79,6 +80,7 @@ app.get("/", (req, res) => {
 
 const googleLoginLink = (clientId, clientSecret) => {
   // Store credentials in the store.
+  console.log(`Credentials \nID ${clientId} \nSECRET ${clientSecret}`);
   memoryStore.set("credentials", { clientId, clientSecret });
 
   const redirectUrl = `http://localhost:${PORT}/auth/google/callback`;
@@ -114,6 +116,11 @@ app.get("/auth/google/callback", (req, res) => {
       )}`
     );
 
+    console.log(`Expire at ${format.asString(
+      "dd/MM/yyyy hh:mm:ss",
+      new Date(token.expiry_date)
+    )}`)
+
     memoryStore.set("token", token);
 
     return res.redirect("/success");
@@ -132,7 +139,7 @@ app.get("/youtube", async (req, res) => {
 
   liveBroadcast(liveId)
     .then(({ chatId, title }) => {
-      console.log(`Start listening chatId ${chatId}`);
+      console.log(`Start listening chatId:\n ${chatId}`);
       memoryStore.set("listening", true);
       res.render("listening", { liveId, chatId, title });
 
@@ -172,6 +179,8 @@ const ytClient = () => {
       });
       resolve(youtube);
     });
+  }).catch((err) => {
+    console.error(`ytClient ${JSON.stringify(err)}`);
   });
 };
 
@@ -196,7 +205,7 @@ const liveBroadcast = (liveId) => {
           const title = response.data.items[0]?.snippet?.title;
           const chatId = response.data.items[0]?.snippet?.liveChatId;
           if (chatId) {
-            console.log(`Chat Id found! ${chatId}`);
+            console.log(`Chat Id found!`);
             resolve({ chatId, title });
           } else {
             console.error(`Chat Id not found!`);
@@ -228,6 +237,10 @@ const liveChatMessages = (liveChatId, pageToken) => {
           if (err) {
             console.error("Error accessing YouTube API:", err);
             reject(err);
+          }
+          if (!response) {
+            console.log(`empty liveChatMessages response!`);
+            reject("Empty liveChatMessages");
           }
           const { pollingIntervalMillis, nextPageToken, items } = response.data;
 

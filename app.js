@@ -44,7 +44,9 @@ app.use(
   })
 );
 
-app.set("view engine", "ejs");
+app.set('views', 'src/views');
+app.set('view engine', 'ejs');
+app.engine('ejs', require('ejs').__express);
 
 // Index, read the credentials json downloaded from Google Cloud
 app.get("/", (req, res) => {
